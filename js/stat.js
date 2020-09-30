@@ -10,8 +10,8 @@ const GAP = 10;
 
 const FONT = `PT Mono`;
 const FONT_SIZE = 16;
-const TEXT_FIRST_STROKE = `Ура вы победили!`;
-const TEXT_SECOND_STROKE = `Список результатов:`;
+const TEXT_FIRST_LINE = `Ура вы победили!`;
+const TEXT_SECOND_LINE = `Список результатов:`;
 const TEXT_COLOR = `#000`;
 
 const BAR_WIDTH = 40;
@@ -22,8 +22,15 @@ const PLAYER_COLOR = `rgba(255, 0, 0, 1)`;
 const PLAYER_NAME = `Вы`;
 
 const getMaxElement = (someArray) => {
+  if (someArray.length === 0) {
+    throw new Error(`Array must not be empty.`);
+  }
   const shallowCopy = [...someArray];
   return shallowCopy.sort((a, b) => b - a)[0];
+};
+
+const getRandomInRange = (min, max) => {
+  return Math.floor(min + Math.random() * (max + 1 - min));
 };
 
 const renderCloud = (ctx, x, y, color) => {
@@ -36,30 +43,31 @@ const renderText = (ctx, text, x, y) => {
   ctx.fillText(text, x, y);
 };
 
-const getSaturation = (min, max) => {
-  return Math.floor(min + Math.random() * (max + 1 - min));
-};
-
 window.renderStatistics = (ctx, names, times) => {
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, CLOUD_SHADOW);
   renderCloud(ctx, CLOUD_X, CLOUD_Y, CLOUD_COLOR);
 
   ctx.fillStyle = TEXT_COLOR;
   ctx.font = `${FONT_SIZE}px ${FONT}`;
-  renderText(ctx, TEXT_FIRST_STROKE, CLOUD_X + GAP * 2, CLOUD_Y + GAP * 2);
-  renderText(ctx, TEXT_SECOND_STROKE, CLOUD_X + GAP * 2, CLOUD_Y + GAP * 2 + FONT_SIZE * 1.2);
+  renderText(ctx, TEXT_FIRST_LINE, CLOUD_X + GAP * 2, CLOUD_Y + GAP * 2);
+  renderText(
+      ctx,
+      TEXT_SECOND_LINE,
+      CLOUD_X + GAP * 2,
+      CLOUD_Y + GAP * 2 + FONT_SIZE * 1.2
+  );
 
   const maxTime = getMaxElement(times);
 
   names.forEach((name, i) => {
-    const barHeight = times[i] * MAX_BAR_HEIGHT / maxTime;
+    const barHeight = (times[i] * MAX_BAR_HEIGHT) / maxTime;
     const barX = CLOUD_X + GAP * 2 + (BAR_WIDTH + BAR_GAP) * i;
     const barY = CLOUD_Y + CLOUD_HEIGHT - barHeight - GAP * 2 - FONT_SIZE;
 
     if (names[i] === PLAYER_NAME) {
       ctx.fillStyle = PLAYER_COLOR;
     } else {
-      ctx.fillStyle = `hsl(235, ${getSaturation(5, 100)}%, 50%)`;
+      ctx.fillStyle = `hsl(235, ${getRandomInRange(5, 100)}%, 50%)`;
     }
 
     ctx.fillRect(barX, barY, BAR_WIDTH, barHeight);
