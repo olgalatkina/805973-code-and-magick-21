@@ -1,14 +1,32 @@
-'use strict';
+"use strict";
 
-const NAMES = [`Иван`, `Хуан Себастьян`, `Мария`, `Кристоф`, `Виктор`, `Юлия`, `Люпита`, `Вашингтон`];
-const SURNAMES = [`да Марья`, `Верон`, `Мирабелла`, `Вальц`, `Онопко`, `Топольницкая`, `Нионго`, `Ирвинг`];
+const NAMES = [
+  `Иван`,
+  `Хуан Себастьян`,
+  `Мария`,
+  `Кристоф`,
+  `Виктор`,
+  `Юлия`,
+  `Люпита`,
+  `Вашингтон`,
+];
+const SURNAMES = [
+  `да Марья`,
+  `Верон`,
+  `Мирабелла`,
+  `Вальц`,
+  `Онопко`,
+  `Топольницкая`,
+  `Нионго`,
+  `Ирвинг`,
+];
 const COAT_COLOR = [
   `rgb(101, 137, 164)`,
   `rgb(241, 43, 107)`,
   `rgb(146, 100, 161)`,
   `rgb(56, 159, 117)`,
   `rgb(215, 210, 55)`,
-  `rgb(0, 0, 0)`
+  `rgb(0, 0, 0)`,
 ];
 const EYES_COLOR = [`black`, `red`, `blue`, `yellow`, `green`];
 const WIZARDS_QUANTITY = 4;
@@ -34,7 +52,7 @@ const shuffleArray = (array) => {
 //   return `${name} ${surname}`;
 // };
 
-const getWizards = (names, surnames, eyesColor, coatColors) => {
+const getWizards = (names, surnames, eyesColor, coatColors, quantity) => {
   let wizards = [];
   const namesCopy = shuffleArray([...names]);
   const surnamesCopy = shuffleArray([...surnames]);
@@ -47,16 +65,22 @@ const getWizards = (names, surnames, eyesColor, coatColors) => {
     });
   });
 
-  return wizards.slice(0, WIZARDS_QUANTITY);
+  return wizards.slice(0, quantity);
 };
 
-const wizards = getWizards(NAMES, SURNAMES, EYES_COLOR, COAT_COLOR);
+const wizards = getWizards(
+    NAMES,
+    SURNAMES,
+    EYES_COLOR,
+    COAT_COLOR,
+    WIZARDS_QUANTITY
+);
 
 const setup = document.querySelector(`.setup`);
 const wizardsList = setup.querySelector(`.setup-similar-list`);
-const wizardTemplate = document.querySelector(`#similar-wizard-template`)
-  .content
-  .querySelector(`.setup-similar-item`);
+const wizardTemplate = document
+  .querySelector(`#similar-wizard-template`)
+  .content.querySelector(`.setup-similar-item`);
 
 const renderWizard = (wizardObj) => {
   const wizard = wizardTemplate.cloneNode(true);
