@@ -53,34 +53,17 @@ const inputCoat = setup.querySelector(`input[name="coat-color"]`);
 const inputEyes = setup.querySelector(`input[name="eyes-color"]`);
 const inputFireball = setup.querySelector(`input[name="fireball-color"]`);
 
-// utils
-
-const getRandomElement = (array) => {
-  return array[Math.floor(Math.random() * array.length)];
-};
-
-const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    let temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-  return array;
-};
-
 // create wizards
-
 const getWizards = (names, surnames, eyesColor, coatColors, quantity) => {
   let wizards = [];
-  const namesCopy = shuffleArray([...names]);
-  const surnamesCopy = shuffleArray([...surnames]);
+  const namesCopy = window.util.shuffleArray([...names]);
+  const surnamesCopy = window.util.shuffleArray([...surnames]);
 
   namesCopy.forEach((name, i) => {
     wizards.push({
       name: `${name} ${surnamesCopy[i]}`,
-      eyesColor: getRandomElement(eyesColor),
-      coatColor: getRandomElement(coatColors),
+      eyesColor: window.util.getRandomElement(eyesColor),
+      coatColor: window.util.getRandomElement(coatColors),
     });
   });
 
@@ -112,63 +95,19 @@ wizards.forEach((wizard) => {
 });
 
 wizardsList.append(fragment);
-
 setup.querySelector(`.setup-similar`).classList.remove(`hidden`);
 
-// open/close popup
-
-const setupOpen = document.querySelector(`.setup-open`);
-const setupClose = setup.querySelector(`.setup-close`);
-
-const onPopupEscPress = (evt) => {
-  if (evt.key === `Escape`) {
-    evt.preventDefault();
-    closePopup();
-  }
-};
-
-const openPopup = () => {
-  setup.classList.remove(`hidden`);
-  document.addEventListener(`keydown`, onPopupEscPress);
-};
-
-const closePopup = () => {
-  setup.classList.add(`hidden`);
-  document.removeEventListener(`keydown`, onPopupEscPress);
-};
-
-setupOpen.addEventListener(`click`, () => {
-  openPopup();
-});
-
-setupOpen.addEventListener(`keydown`, (evt) => {
-  if (evt.key === `Enter`) {
-    openPopup();
-  }
-});
-
-setupClose.addEventListener(`click`, () => {
-  closePopup();
-});
-
-setupClose.addEventListener(`keydown`, (evt) => {
-  if (evt.key === `Enter`) {
-    closePopup();
-  }
-});
-
 // form
-
 userNameInput.addEventListener(`focus`, (evt) => {
   evt.target.value = ``;
-  document.removeEventListener(`keydown`, onPopupEscPress);
+  document.removeEventListener(`keydown`, window.dialog.onPopupEscPress);
 });
 
 userNameInput.addEventListener(`blur`, (evt) => {
   if (evt.target.value === ValidationMessage.EMPTY_MESSAGE) {
     evt.target.value = USER_NAME_DEFAULT;
   }
-  document.addEventListener(`keydown`, onPopupEscPress);
+  document.addEventListener(`keydown`, window.dialog.onPopupEscPress);
 });
 
 userNameInput.addEventListener(`invalid`, () => {
@@ -197,30 +136,28 @@ userNameInput.addEventListener(`input`, () => {
   userNameInput.reportValidity();
 });
 
-const fillElement = (el, color) => {
-  el.style.fill = color;
-};
-
-const setBackgroundColor = (el, color) => {
-  el.style.backgroundColor = color;
-};
-
-const changeColor = (arr, element, input, cb) => {
-  const color = getRandomElement(arr);
-  input.value = color;
-  cb(element, color);
-};
-
 const onWizardCoatClick = () => {
-  changeColor(COAT_COLORS, wizardCoat, inputCoat, fillElement);
+  window.colorize.changeColor(
+      COAT_COLORS,
+      wizardCoat,
+      inputCoat,
+      window.colorize.fillElement);
 };
 
 const onWizardEyesClick = () => {
-  changeColor(EYES_COLORS, wizardEyes, inputEyes, fillElement);
+  window.colorize.changeColor(
+      EYES_COLORS,
+      wizardEyes,
+      inputEyes,
+      window.colorize.fillElement);
 };
 
 const onWizardFireballClick = () => {
-  changeColor(FIREBALL_COLORS, fireball, inputFireball, setBackgroundColor);
+  window.colorize.changeColor(
+      FIREBALL_COLORS,
+      fireball,
+      inputFireball,
+      window.colorize.setBackgroundColor);
 };
 
 wizardCoat.addEventListener(`click`, onWizardCoatClick);

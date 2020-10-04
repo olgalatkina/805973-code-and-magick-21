@@ -21,18 +21,6 @@ const BAR_GAP = 50;
 const PLAYER_COLOR = `rgba(255, 0, 0, 1)`;
 const PLAYER_NAME = `Вы`;
 
-const getMaxElement = (someArray) => {
-  if (someArray.length === 0) {
-    throw new Error(`Array must not be empty.`);
-  }
-  const shallowCopy = [...someArray];
-  return shallowCopy.sort((a, b) => b - a)[0];
-};
-
-const getRandomInRange = (min, max) => {
-  return Math.floor(min + Math.random() * (max + 1 - min));
-};
-
 const renderCloud = (ctx, x, y, color) => {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
@@ -57,7 +45,7 @@ window.renderStatistics = (ctx, names, times) => {
       CLOUD_Y + GAP * 2 + FONT_SIZE * 1.2
   );
 
-  const maxTime = getMaxElement(times);
+  const maxTime = window.util.getMaxElement(times);
 
   names.forEach((name, i) => {
     const barHeight = (times[i] * MAX_BAR_HEIGHT) / maxTime;
@@ -67,7 +55,7 @@ window.renderStatistics = (ctx, names, times) => {
     if (names[i] === PLAYER_NAME) {
       ctx.fillStyle = PLAYER_COLOR;
     } else {
-      ctx.fillStyle = `hsl(235, ${getRandomInRange(5, 100)}%, 50%)`;
+      ctx.fillStyle = `hsl(235, ${window.util.getRandomInRange(5, 100)}%, 50%)`;
     }
 
     ctx.fillRect(barX, barY, BAR_WIDTH, barHeight);
